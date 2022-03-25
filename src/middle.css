@@ -1,0 +1,31 @@
+.middle-container {
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  transform: translate(-50%, -50%);
+}
+
+
+.card-holder img {
+	height: 130px;
+}
+
+
+.top,
+.bottom {
+  display: block;
+  margin: auto;
+}
+
+.mid-parent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.left, .right {
+	transform: rotate(90deg);
+}
+
+.right {
+	margin-left: 200px;
+}
