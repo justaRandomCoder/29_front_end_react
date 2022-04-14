@@ -1,0 +1,90 @@
+.trump-card {
+	position: relative;
+	flex-direction: column;
+	margin-left: 5px;
+}
+
+.game-container {
+	position: relative;
+	width: 90%;
+	height: 90vh;
+	background-color: #7fac71;
+	border-radius: 16px;
+	padding: 0.5rem;
+}
+
+.cards-container {
+	position: absolute;
+	left: 375px;
+	bottom: 30px;
+	display: flex;
+	gap: 1rem;
+}
+
+.card {
+	position: relative;
+	left: 10px;
+	width: 100px;
+	cursor: pointer;
+	transition: all 200ms;
+}
+
+.profile {
+	width: 100px;
+	height: 100px;
+	background-color: aquamarine;
+	position: absolute;
+	border-radius: 20;
+	border-width: 3;
+}
+
+.profile1 {
+	transform: translate(-50%);
+	top: 10px;
+	left: 50%;
+}
+
+.profile2 {
+	top: 50%;
+	left: 10px;
+	transform: translate(0, -50%);
+}
+
+.profile3 {
+	top: 50%;
+	right: 10px;
+	transform: translate(0, -50%);
+}
+
+.rectangle {
+	display: none;
+	width: 100px;
+	height: 100px;
+	background: #665761;
+}
+
+.trump-card-btn, .deal-btn {
+	border-radius: 6px;
+	padding: 0.8rem 1.6rem;
+	width: fit-content;
+	background-color: hsl(0, 71%, 57%);
+	color: white;
+	transition: background-color 200ms;
+	cursor: pointer;
+	user-select: none;
+	margin: 1rem;
+	margin-left: 5px;
+}
+.trump-card-btn:hover {
+	background-color: hsl(0, 71%, 67%);
+}
+
+.deal-btn {
+	color: white;
+	font-weight: bold;
+	background-color: hsl(0, 0%, 30%);
+}
+
+.deal-btn:hover {
+	background-color: hsl(0, 0%, 40%);
+}

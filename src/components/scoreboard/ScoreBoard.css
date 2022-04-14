@@ -1,0 +1,20 @@
+.score-board-container {
+  position: absolute;
+}
+
+.score-board {
+  background-color: rgb(228, 118, 91);
+  padding: 0.5rem;
+  border-radius: 12px;
+  display: flex;
+}
+
+.score {
+  border: 1px solid black;
+  border-width: 0 1px 0 1px;
+  padding: 1rem;
+}
+
+.score-title {
+  text-align: center;
+}

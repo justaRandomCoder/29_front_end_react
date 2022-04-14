@@ -30,50 +30,51 @@ import dA from './AD.svg';
 import dJ from './JD.svg';
 import dK from './KD.svg';
 import dQ from './QD.svg';
-import trump from './Red_Back.svg'
-import c2 from './2C.svg' 
-import d2 from './2D.svg' 
-import h2 from './2H.svg' 
-import s2 from './2S.svg' 
-import player from './player.png'
+import trump from './Red_Back.svg';
+import c2 from './2C.svg';
+import d2 from './2D.svg';
+import h2 from './2H.svg';
+import s2 from './2S.svg';
+import player from './player.png';
 
+// eslint-disable-next-line
 export default {
-	'h7': h7,
-	'h8': h8,
-	'h9': h9,
-	'h10': h10,
-	'hA': hA,
-	'hJ': hJ,
-	'hK': hK,
-	'hQ': hQ,
-	'c7': c7,
-	'c8': c8,
-	'c9': c9,
-	'c10': c10,
-	'cA': cA,
-	'cJ': cJ,
-	'cK': cK,
-	'cQ': cQ,
-	's7': s7,
-	's8': s8,
-	's9': s9,
-	's10': s10,
-	'sA': sA,
-	'sJ': sJ,
-	'sK': sK,
-	'sQ': sQ,
-	'd7': d7,
-	'd8': d8,
-	'd9': d9,
-	'd10': d10,
-	'dA': dA,
-	'dJ': dJ,
-	'dK': dK,
-	'dQ': dQ,
-	'trump': trump,
-	'trump-spade': s2,
-	'trump-hearts': h2,
-	'trump-clubs': c2,
-	'trump-dice': d2,
-	'player': player
-}
+  h7: h7,
+  h8: h8,
+  h9: h9,
+  h10: h10,
+  hA: hA,
+  hJ: hJ,
+  hK: hK,
+  hQ: hQ,
+  c7: c7,
+  c8: c8,
+  c9: c9,
+  c10: c10,
+  cA: cA,
+  cJ: cJ,
+  cK: cK,
+  cQ: cQ,
+  s7: s7,
+  s8: s8,
+  s9: s9,
+  s10: s10,
+  sA: sA,
+  sJ: sJ,
+  sK: sK,
+  sQ: sQ,
+  d7: d7,
+  d8: d8,
+  d9: d9,
+  d10: d10,
+  dA: dA,
+  dJ: dJ,
+  dK: dK,
+  dQ: dQ,
+  trump: trump,
+  'trump-spade': s2,
+  'trump-hearts': h2,
+  'trump-clubs': c2,
+  'trump-dice': d2,
+  player: player,
+};

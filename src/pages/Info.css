@@ -1,0 +1,8 @@
+.infopage {
+	position: relative;
+	width: 90%;
+	height: 90vh;
+	background-color: #7fac71;
+	border-radius: 16px;
+	padding: 0.5rem;
+}

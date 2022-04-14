@@ -1,0 +1,38 @@
+.origin {
+  width: 100px;
+  height: 130px;
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  --offset: -8rem;
+}
+
+.middlecard__left, .middlecard__right, .middlecard__top, .middlecard__bottom {
+  position: absolute;
+}
+.origin img {
+  height: 130px;
+}
+.middlecard__left {
+  left: var(--offset);
+  transform: rotate(90deg);
+}
+
+.middlecard__right {
+  right: var(--offset);
+  transform: rotate(-90deg);
+}
+
+.middlecard__top {
+  top: var(--offset);
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.middlecard__bottom {
+  bottom: var(--offset);
+  left: 50%;
+  transform: translate(-50%);
+}

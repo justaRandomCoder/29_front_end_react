@@ -1,0 +1,21 @@
+.homepage {
+	background-image: url('../assets/images/background-image.jpg');
+}
+
+
+.btn {
+	padding: 0.8rem 10rem;
+	border-radius: 6px;
+	background-color: hsl(0, 0%, 20%);
+	color: white;
+	font-size: 1.5rem;
+	margin-bottom: 1rem;
+	transition: background-color 200ms;
+	cursor: pointer;
+	user-select: none;
+	border-bottom: 2px solid white;
+}
+
+.btn:hover {
+	background-color: hsl(0, 0%, 10%);
+}
