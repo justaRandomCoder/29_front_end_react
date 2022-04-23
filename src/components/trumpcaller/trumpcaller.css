@@ -1,0 +1,45 @@
+.trump-caller{
+    width: 300px;
+    border: 8px solid lightblue;
+    padding: 50px;
+    margin: 20px;
+    background-color: aliceblue;
+}
+.heading-text{
+    font-size: 25px;
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.count{
+    font-size: 20px;
+    font-weight: 400;
+}
+.trump-count{
+    height: 150px;
+    border: 2px solid black;
+    margin: 10px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.options{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.pass-btn{
+    width: 80px;
+    background-color: lightcoral;
+    cursor: pointer;
+}
+.incr-btn{
+    width: 80px;
+    background-color: rgb(255, 166, 0);
+    cursor: pointer;
+}
+.call-btn{
+    width: 80px;
+    background-color: rgb(0, 255, 0);
+    cursor: pointer;
+}

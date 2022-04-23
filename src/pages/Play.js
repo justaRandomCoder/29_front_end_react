@@ -1,25 +1,50 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import cardpng from '../cardpng';
 import MiddleSection from '../components/middle/middle';
 import ScoreBoard from '../components/scoreboard/ScoreBoard';
+import Trumpcaller from '../components/trumpcaller/Trumpcaller';
 import './Play.css';
+import axios from 'axios'
+const Players = {
+  top: 4,
+  right: 3,
+  bottom: 2,
+  left: 1,
+};
+
+const PlayersRev = {
+  1: 'left',
+  2: 'bottom',
+  3: 'right',
+  4: 'top',
+};
 
 const Play = () => {
   const [imgarray, setImgArray] = useState([]);
   const [trumpSuit, setTrumpSuit] = useState(cardpng['trump']);
-  const [middleCards, setMiddleCards] = useState({
-    top: null,
-    right: null,
-    bottom: null,
-    left: null,
+  const [t1Score, sett1Score] = useState(0);
+  const [t2Score, sett2Score] = useState(0);
+  const [topCard, setTopCard] = useState(null);
+  const [leftCard, setLeftCard] = useState(null);
+  const [rightCard, setRightCard] = useState(null);
+  const [bottomCard, setBottomCard] = useState(null);
+
+  const myCards = useRef({
+    top: false,
+    right: false,
+    bottom: false,
+    left: false,
   });
+
+  const [currentPlayer, setCurrentPlayer] = useState(null);
+  const [startingPlayer, setStartingPlayer] = useState(null);
+
+  const [isCurrentUser, setIsCurrentUser] = useState(false);
 
   const suits = ['s', 'd', 'c', 'h'];
   const values = ['A', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
   let deck = [];
-
-  // create a deck of cards
   for (let i = 0; i < suits.length; i++) {
     for (let x = 0; x < values.length; x++) {
       let card = suits[i] + values[x];
@@ -33,10 +58,60 @@ const Play = () => {
     deck[i] = deck[j];
     deck[j] = temp;
   }
+  
 
   let cards = [];
 
+  useEffect(() => {
+    let cur = Players.bottom;
+    setCurrentPlayer(cur);
+    setStartingPlayer(cur);
+  }, []);
+
+  useEffect(() => {
+    if (topCard != null) {
+      myCards.current.top = true;
+    } else {
+      myCards.current.top = false;
+    }
+  }, [topCard]);
+
+  useEffect(() => {
+    if (rightCard != null) {
+      myCards.current.right = true;
+    } else {
+      myCards.current.right = false;
+    }
+  }, [rightCard]);
+
+  useEffect(() => {
+    if (bottomCard != null) {
+      myCards.current.bottom = true;
+    } else {
+      myCards.current.bottom = false;
+    }
+  }, [bottomCard]);
+
+  useEffect(() => {
+    if (leftCard != null) {
+      myCards.current.left = true;
+    } else {
+      myCards.current.left = false;
+    }
+  }, [leftCard]);
+
+  const clearCards = () => {
+    sett1Score(t1Score+1)
+    sett2Score(t2Score+1)
+    console.log('clearing cards');
+    setTopCard(null);
+    setLeftCard(null);
+    setRightCard(null);
+    setBottomCard(null);
+  };
+
   const showTrump = () => {
+    //send to state that trump has been shown
     setTrumpSuit(cardpng['trump-spade']);
   };
 
@@ -44,17 +119,23 @@ const Play = () => {
     setTrumpSuit(cardpng['trump']);
   };
 
-  const dealCards = (imgarray) => {
+
+  
+
+  const dealCards = async(imgarray) => {
     if (imgarray.length === 0 || imgarray.length === 8) {
-      // for (let i = 0; i < 4; i++) {
-      //   cards[i] = deck[i];
-      // }
-      cards = ['cJ', 'sJ', 'hQ', 's9'];
+      
+      let res = ''
+      const response = await axios.post('https://95dd-103-92-214-20.in.ngrok.io/init', {first_player: 0})
+      cards = response.data.state.player_hand;
       console.log(cards);
+
+
     } else {
       for (let i = 4; i < 8; i++) {
         // cards[i - 4] = imgarray[i - 4].card;
         // cards[i] = deck[i];
+        
         cards = ['cJ', 'sJ', 'hQ', 's9', 'd7', 'dA', 'sK', 'c7'];
       }
       console.log(cards);
@@ -68,15 +149,30 @@ const Play = () => {
       });
     }
     setImgArray(newImgArray);
+    setIsCurrentUser(!isCurrentUser);
   };
 
   const handleBottomCard = (index) => {
     const newImgArray = [];
     for (let i = 0; i < imgarray.length; i++) {
       if (i === index) {
-        let mid = { ...middleCards, bottom: imgarray[i].path };
-        setMiddleCards(mid);
-        handleOtherPlayerCards(mid);
+        setBottomCard(imgarray[i].path);
+
+        if (rightCard == null) {
+          setCurrentPlayer((currentPlayer % 4) + 1);
+          toggleTurn({
+            willClearCards: true,
+            currentPlayer: (currentPlayer % 4) + 1,
+          });
+        } else {
+          setTimeout(() => {
+            clearCards();
+            let nextStartingPlayer = (startingPlayer % 4) + 1;
+            setCurrentPlayer(nextStartingPlayer);
+            setStartingPlayer(nextStartingPlayer);
+            toggleTurn({ currentPlayer: nextStartingPlayer });
+          }, 1000);
+        }
       } else newImgArray.push(imgarray[i]);
     }
     setImgArray(newImgArray);
@@ -84,51 +180,65 @@ const Play = () => {
   //make a network request at the beginning of each round
   //make a network request when user plays a card
 
+  const toggleTurn = ({ willClearCards = false, currentPlayer }) => {
+    if (currentPlayer === Players['bottom']) return;
 
-  // call this after user selects a card
-  const handleOtherPlayerCards = (newMiddleCards) => {
-    // bottom player selected card so show right and top cards one by one
-
-    let i = 0;
-    let middle = newMiddleCards;
+    let nextPlayer = currentPlayer;
+    let clear = false;
     let id = setInterval(() => {
-      
-      if (i === 0) {
-        middle = { ...middle, right: cardpng['d7'] };
-        setMiddleCards(middle);
+      // top card
+      if (nextPlayer === Players['top']) {
+        if (myCards.current.top == false) {
+          setTopCard(cardpng['c9']);
+        } else {
+          clear = true;
+        }
+        // left card
+      } else if (nextPlayer === Players['left']) {
+        if (myCards.current.left == false) {
+          setLeftCard(cardpng['c8']);
+        } else {
+          clear = true;
+        }
+        // right card
+      } else if (nextPlayer === Players['right']) {
+        if (myCards.current.right == false) {
+          setRightCard(cardpng['d7']);
+        } else {
+          clear = true;
+        }
+        // bottom card <== user's card
+      } else {
+        clear = true;
       }
-      if (i === 1) {
-        middle = { ...middle, top: cardpng['c9'] };
-        setMiddleCards(middle);
+      if (clear) {
+        clearInterval(id);
+        if (willClearCards) {
+          // change here
+          clearCards();
+          let nextStartingPlayer = (startingPlayer % 4) + 1; // basically if 4 then 1 otherwise ++
+          setCurrentPlayer(nextStartingPlayer);
+          setStartingPlayer(nextStartingPlayer);
+          toggleTurn({ currentPlayer: nextStartingPlayer });
+        }
+      } else {
+        nextPlayer = (nextPlayer % 4) + 1;
+        setCurrentPlayer(nextPlayer);
       }
-      if(i === 2) {
-        middle = { ...middle, left:cardpng['c8']}
-        setMiddleCards(middle)
-      }  
-      if (i === 3) {
-        middle = {}
-        setMiddleCards(middle)
-      }; 
-      i++;
-      if(i == 4){
-        clearInterval(id)
-      }
-      
     }, 1000);
-
+    //update score here
+    
   };
 
-  // this function will we called the first time page loads
-  
   return (
     <div className='container'>
+      <p>{PlayersRev[currentPlayer]}</p>
       <div className='game-container'>
-        <div
-          className='deal-btn'
-          onClick={() => dealCards(imgarray)}
-        >
+        {isCurrentUser && <Trumpcaller />}
+        <div className='deal-btn' onClick={() => dealCards(imgarray)}>
           Deal
         </div>
+        <div> Round bid: </div>
         <div className='trump-card'>
           <img
             alt='card'
@@ -139,14 +249,14 @@ const Play = () => {
             height='150'
           />
         </div>
-          <div
-            className='trump-card-btn'
-            onClick={() => {
-              trumpSuit === cardpng['trump'] ? showTrump() : hideTrump();
-            }}
-          >
-            {trumpSuit === cardpng['trump'] ? 'Show Trump' : 'Hide Trump'}
-          </div>
+        <div
+          className='trump-card-btn'
+          onClick={() => {
+            trumpSuit === cardpng['trump'] ? showTrump() : hideTrump();
+          }}
+        >
+          {trumpSuit === cardpng['trump'] ? 'Show Trump' : 'Hide Trump'}
+        </div>
 
         <div className='profile profile1'>
           <img
@@ -179,20 +289,20 @@ const Play = () => {
           <div> Player 3 </div>
         </div>
         <ScoreBoard
-          t1={2}
-          t2={3}
+          t1={t1Score}
+          t2={t2Score}
           containerStyle={{ top: '10px', right: '10px' }}
         />
         <ScoreBoard
-          t1={1}
-          t2={4}
+          t1={t1Score}
+          t2={t2Score}
           containerStyle={{ bottom: '10px', left: '10px' }}
         />
         <MiddleSection
-          top={middleCards.top}
-          right={middleCards.right}
-          bottom={middleCards.bottom}
-          left={middleCards.left}
+          top={topCard}
+          right={rightCard}
+          bottom={bottomCard}
+          left={leftCard}
         />
         <div className='cards-container'>
           {imgarray.map((value, index) => {
@@ -201,7 +311,9 @@ const Play = () => {
                 key={index}
                 alt='card'
                 onClick={() => {
-                  handleBottomCard(index);
+                  if (currentPlayer === Players['bottom']) {
+                    handleBottomCard(index);
+                  }
                 }}
                 className={'card'}
                 src={value.path}
