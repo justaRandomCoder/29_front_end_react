@@ -4,7 +4,7 @@ import MiddleSection from '../components/middle/middle';
 import ScoreBoard from '../components/scoreboard/ScoreBoard';
 import Trumpcaller from '../components/trumpcaller/Trumpcaller';
 import './Play.css';
-import axios from 'axios'
+
 const Players = {
   top: 4,
   right: 3,
@@ -22,8 +22,13 @@ const PlayersRev = {
 const Play = () => {
   const [imgarray, setImgArray] = useState([]);
   const [trumpSuit, setTrumpSuit] = useState(cardpng['trump']);
-  const [t1Score, sett1Score] = useState(0);
-  const [t2Score, sett2Score] = useState(0);
+  // const [middleCards, setMiddleCards] = useState({
+  // top: null,
+  // right: null,
+  // bottom: null,
+  // left: null,
+  // });
+
   const [topCard, setTopCard] = useState(null);
   const [leftCard, setLeftCard] = useState(null);
   const [rightCard, setRightCard] = useState(null);
@@ -45,6 +50,8 @@ const Play = () => {
   const values = ['A', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
   let deck = [];
+
+  // create a deck of cards
   for (let i = 0; i < suits.length; i++) {
     for (let x = 0; x < values.length; x++) {
       let card = suits[i] + values[x];
@@ -58,7 +65,6 @@ const Play = () => {
     deck[i] = deck[j];
     deck[j] = temp;
   }
-  
 
   let cards = [];
 
@@ -101,8 +107,6 @@ const Play = () => {
   }, [leftCard]);
 
   const clearCards = () => {
-    sett1Score(t1Score+1)
-    sett2Score(t2Score+1)
     console.log('clearing cards');
     setTopCard(null);
     setLeftCard(null);
@@ -111,7 +115,6 @@ const Play = () => {
   };
 
   const showTrump = () => {
-    //send to state that trump has been shown
     setTrumpSuit(cardpng['trump-spade']);
   };
 
@@ -119,23 +122,17 @@ const Play = () => {
     setTrumpSuit(cardpng['trump']);
   };
 
-
-  
-
-  const dealCards = async(imgarray) => {
+  const dealCards = (imgarray) => {
     if (imgarray.length === 0 || imgarray.length === 8) {
-      
-      let res = ''
-      const response = await axios.post('https://95dd-103-92-214-20.in.ngrok.io/init', {first_player: 0})
-      cards = response.data.state.player_hand;
+      // for (let i = 0; i < 4; i++) {
+      //   cards[i] = deck[i];
+      // }
+      cards = ['cJ', 'sJ', 'hQ', 's9'];
       console.log(cards);
-
-
     } else {
       for (let i = 4; i < 8; i++) {
         // cards[i - 4] = imgarray[i - 4].card;
         // cards[i] = deck[i];
-        
         cards = ['cJ', 'sJ', 'hQ', 's9', 'd7', 'dA', 'sK', 'c7'];
       }
       console.log(cards);
@@ -226,8 +223,6 @@ const Play = () => {
         setCurrentPlayer(nextPlayer);
       }
     }, 1000);
-    //update score here
-    
   };
 
   return (
@@ -238,7 +233,6 @@ const Play = () => {
         <div className='deal-btn' onClick={() => dealCards(imgarray)}>
           Deal
         </div>
-        <div> Round bid: </div>
         <div className='trump-card'>
           <img
             alt='card'
@@ -289,13 +283,13 @@ const Play = () => {
           <div> Player 3 </div>
         </div>
         <ScoreBoard
-          t1={t1Score}
-          t2={t2Score}
+          t1={2}
+          t2={3}
           containerStyle={{ top: '10px', right: '10px' }}
         />
         <ScoreBoard
-          t1={t1Score}
-          t2={t2Score}
+          t1={1}
+          t2={4}
           containerStyle={{ bottom: '10px', left: '10px' }}
         />
         <MiddleSection
